@@ -12,16 +12,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python -m pip install -e '.[dev]'
-      - run: ruff check .
-      - run: mypy src/marketlens
-      - run: python -m unittest discover -s tests -v
-      - run: python -m build
-      - run: marketlens research examples/request.json --demo --output outputs/demo
-      - run: marketlens evaluate outputs/demo/corpus.jsonl examples/synthetic-questions.jsonl
+      - run: python -m pip install uv
+      - run: uv sync --frozen --extra dev --extra validation --extra viewer
+      - run: .venv/bin/ruff check .
+      - run: .venv/bin/mypy src/marketlens
+      - run: .venv/bin/python -m unittest discover -s tests -v
+      - run: .venv/bin/python -m build
+      - run: .venv/bin/marketlens research examples/request.json --demo --output outputs/demo
+      - run: .venv/bin/marketlens evaluate outputs/demo/corpus.jsonl examples/synthetic-questions.jsonl
       - name: Check commit messages
         if: github.event_name == 'pull_request'
         env:
           BASE: ${{ github.event.pull_request.base.sha }}
           HEAD: ${{ github.event.pull_request.head.sha }}
-        run: cz check --rev-range "$BASE..$HEAD"
+        run: .venv/bin/cz check --rev-range "$BASE..$HEAD"
