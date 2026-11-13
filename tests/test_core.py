@@ -1,13 +1,16 @@
 import tempfile
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from marketlens.demo import DemoModel, DemoSearch
 from marketlens.evaluation import evaluate
 from marketlens.models import Claim, Company, ResearchRequest, Settings
 from marketlens.pipeline import override_reducer, run_research
+from marketlens.providers import TavilySearch
 from marketlens.report import verify
 from marketlens.retrieval import Retriever, chunk_document
+from marketlens.storage import Cache
 
 
 def request():
@@ -69,6 +72,20 @@ class CoreTests(unittest.TestCase):
         questions[0]["relevant_ids"] = ["missing"]
         with self.assertRaises(ValueError):
             evaluate(evidence, questions)
+
+    def test_search_cache_and_retry_budget(self):
+        with tempfile.TemporaryDirectory() as output:
+            cache = Cache(output + "/cache.sqlite")
+            client = SimpleNamespace(search=lambda **kwargs: {"results": [{"url": "https://example.com"}]})
+            with patch.dict("sys.modules", {"tavily": SimpleNamespace(TavilyClient=lambda **kw: client)}), patch.dict("os.environ", {"TAVILY_API_KEY": "test"}):
+                search = TavilySearch(cache, limit=2)
+                self.assertEqual(search.search("first"), search.search("first"))
+                self.assertEqual(search.calls, 1)
+                with patch.object(client, "search", side_effect=RuntimeError("unavailable")), patch("time.sleep"):
+                    with self.assertRaisesRegex(RuntimeError, "budget"):
+                        search.search("second")
+                self.assertEqual(search.calls, 2)
+            cache.close()
 
     def test_override_reducer(self):
         self.assertEqual(override_reducer([1], [2]), [1, 2])

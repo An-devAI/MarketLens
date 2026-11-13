@@ -33,8 +33,10 @@ class TavilySearch:
             return cached
         if self.calls >= self.limit:
             raise RuntimeError("Search budget exhausted")
-        self.calls += 1
         for attempt in range(3):
+            if self.calls >= self.limit:
+                raise RuntimeError("Search budget exhausted")
+            self.calls += 1
             try:
                 results = self.client.search(query=query, search_depth="basic", max_results=5,
                                              include_raw_content=False)["results"]
