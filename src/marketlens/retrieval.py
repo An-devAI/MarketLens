@@ -70,6 +70,8 @@ class Retriever:
             ranking = sparse
         else:
             import numpy as np
+            if self.vectors is None:
+                raise RuntimeError("Dense index is unavailable")
             vector = np.asarray(self.encoder.encode(["query: " + query],
                                 normalize_embeddings=True), dtype="float32")
             _, indexes = self.vectors.search(vector, len(self.evidence))
@@ -77,9 +79,30 @@ class Retriever:
             if self.mode == "dense":
                 ranking = dense
             else:
-                fused = Counter()
+                fused: dict[int, float] = {}
                 for ordered in (sparse, dense):
                     for rank, i in enumerate(ordered):
-                        fused[i] += 1 / (60 + rank + 1)
+                        fused[i] = fused.get(i, 0.0) + 1 / (60 + rank + 1)
                 ranking = sorted(fused, key=lambda i: (-fused[i], i))
         return [self.evidence[i] for i in ranking[:k]]
+
+
+class CachedEncoder:
+    """Reuse passage embeddings across growing indexes within one research run."""
+
+    def __init__(self, encoder):
+        self.encoder = encoder
+        self.tokenizer = getattr(encoder, "tokenizer", None)
+        self.cache: dict[tuple[str, bool], object] = {}
+
+    def encode(self, texts, normalize_embeddings=True):
+        import numpy as np
+
+        missing = list(dict.fromkeys(text for text in texts
+                                    if (text, normalize_embeddings) not in self.cache))
+        if missing:
+            vectors = self.encoder.encode(missing, normalize_embeddings=normalize_embeddings)
+            for text, vector in zip(missing, vectors, strict=True):
+                self.cache[(text, normalize_embeddings)] = vector
+        return np.asarray([self.cache[(text, normalize_embeddings)] for text in texts],
+                          dtype="float32")

@@ -8,7 +8,7 @@ from urllib.parse import urlsplit
 
 from .models import AXES, Claim, Evidence, ReportBundle, ResearchPlan, Settings
 from .report import render, verify
-from .retrieval import Retriever, chunk_document
+from .retrieval import CachedEncoder, Retriever, chunk_document
 from .storage import Cache, atomic_json
 
 
@@ -46,6 +46,8 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
     if encoder is None and settings.retrieval != "bm25":
         from sentence_transformers import SentenceTransformer
         encoder = SentenceTransformer(settings.embedding, device="cpu")
+    if encoder is not None:
+        encoder = CachedEncoder(encoder)
     evidence = [Evidence.model_validate(e) for e in (checkpoint or {}).get("evidence", [])]
     claims = [Claim.model_validate(c) for c in (checkpoint or {}).get("claims", [])]
     warnings = list((checkpoint or {}).get("warnings", []))
@@ -84,6 +86,9 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
                     key = company_name + ":" + url
                     if key in documents or len(documents) >= settings.max_documents:
                         continue
+                    company_count = sum(item.startswith(company_name + ":") for item in documents)
+                    if company_count >= max(1, settings.max_documents // len(request.companies)):
+                        continue
                     try:
                         text = search.fetch(url)
                         digest = hashlib.sha256(text.encode()).hexdigest()
@@ -93,7 +98,7 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
                         hashes.add((company_name, digest))
                         tokenizer = getattr(encoder, "tokenizer", None)
                         evidence.extend(chunk_document(company_name, url, item.get("title", url),
-                            text, datetime.now(timezone.utc).isoformat(), tokenizer))
+                            text, getattr(search, "collected_at", datetime.now(timezone.utc).isoformat()), tokenizer))
                     except Exception as exc:
                         warnings.append(f"Source unavailable {url}: {type(exc).__name__}")
             except Exception as exc:
@@ -123,12 +128,16 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
                 "claims": [c.model_dump() for c in claims], "warnings": warnings,
                 "documents": sorted(documents), "searches": getattr(search, "calls", 0),
                 "traces": traces, "round": state["round"]})
+        checkpoint = cache.get("checkpoint")
+        if checkpoint:
+            checkpoint["round"] = state["round"] + 1
+            cache.put("checkpoint", checkpoint)
         return {"round": state["round"] + 1}
 
     def route(state):
         return "researcher" if state["missing"] and state["round"] <= settings.rounds else "end"
 
-    initial = {"round": (checkpoint or {}).get("round", 0), "missing": [], "notes": []}
+    initial: ResearchState = {"round": (checkpoint or {}).get("round", 0), "missing": [], "notes": []}
     try:
         if graph:
             from langgraph.graph import END, START, StateGraph
@@ -153,6 +162,8 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
             manifest={"request_hash": fingerprint, "settings": settings.model_dump(),
                       "duration_seconds": round(time.monotonic()-start, 3),
                       "search_calls_total": getattr(search, "calls", 0),
+                      "collection_search_calls": getattr(search, "collection_search_calls", 0),
+                      "collection_timestamp": getattr(search, "collected_at", None),
                       "input_tokens": getattr(model, "input_tokens", 0),
                       "output_tokens": getattr(model, "output_tokens", 0),
                       "citation_check": "Reference and quote integrity only; semantic review required"})
