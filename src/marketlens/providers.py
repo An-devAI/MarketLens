@@ -3,6 +3,7 @@ import json
 import os
 import socket
 import time
+from pathlib import Path
 from urllib.parse import urlsplit
 
 from .models import ClaimBatch
@@ -20,8 +21,14 @@ def public_url(url):
 
 class TavilySearch:
     def __init__(self, cache, limit=30):
+        from dotenv import load_dotenv
         from tavily import TavilyClient
-        self.client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
+
+        load_dotenv(Path.cwd() / ".env", override=False)
+        api_key = os.environ.get("TAVILY_API_KEY", "").strip()
+        if not api_key:
+            raise RuntimeError("Set TAVILY_API_KEY in the environment or the working directory's .env")
+        self.client = TavilyClient(api_key=api_key)
         self.cache = cache
         self.limit = limit
         self.calls = 0

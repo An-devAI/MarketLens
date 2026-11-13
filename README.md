@@ -18,7 +18,7 @@ The demo uses explicitly synthetic content, not company facts. The viewer can in
 
 ## Live research
 
-Install `.[research]` on a CUDA machine or follow notebooks/kaggle_research.ipynb. Set TAVILY_API_KEY in the environment or Kaggle Secrets. Run `marketlens research examples/request.json --output outputs/live`. Reuse the same output directory and identical settings to resume cached evidence and progress; use a new directory for a new request. Internet access is needed for models and collection. Default limits are 30 search calls, 30 documents and two follow-up rounds.
+Install `.[research]` on a CUDA machine or follow notebooks/kaggle_research.ipynb. Set TAVILY_API_KEY in the environment, in `.env` in the working directory, or in Kaggle Secrets. Existing environment variables take precedence over `.env`; the local file is excluded from Git. Run `marketlens research examples/request.json --output outputs/live` from the product directory. Reuse the same output directory and identical settings to resume cached evidence and progress; use a new directory for a new request. Internet access is needed for models and collection. Default limits are 30 search calls, 30 documents and two follow-up rounds.
 
 ## Architecture
 
