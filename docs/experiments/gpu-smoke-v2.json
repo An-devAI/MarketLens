@@ -1,0 +1,36 @@
+{
+  "experiment": "gpu-smoke-v2",
+  "kernel_version": 2,
+  "runtime": {
+    "gpu": "Tesla T4",
+    "duration_seconds": 659.089564029,
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "transformers": "4.57.6",
+      "sentence-transformers": "5.7.0",
+      "langgraph": "1.2.17",
+      "faiss-cpu": "1.16.0",
+      "marketlens": "0.1.0.dev0"
+    },
+    "status": "partial",
+    "claims": 30,
+    "evidence_chunks": 200
+  },
+  "claim_kinds": {
+    "fact": 12,
+    "inference": 10,
+    "unknown": 8
+  },
+  "covered_cells": 12,
+  "total_cells": 15,
+  "warnings": [
+    "Rejected invalid citation for Notion/positioning",
+    "Rejected invalid citation for Asana/product",
+    "Rejected invalid citation for Asana/customers",
+    "Rejected invalid citation for monday.com/product",
+    "Rejected invalid citation for monday.com/integrations"
+  ],
+  "source_snapshot_hash": "dcf126d0f9519a96c1fc1762c350face358bb5c61365e31b9ec03e919b85c5eb",
+  "model_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "note": "Integrity checks are not semantic review. Full report and review sheet remain local/private; public example is a curated excerpt."
+}

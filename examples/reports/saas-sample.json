@@ -1,0 +1,316 @@
+{
+  "schema_version": 1,
+  "request": {
+    "companies": [
+      {
+        "name": "Notion",
+        "website": "https://www.notion.com"
+      },
+      {
+        "name": "Asana",
+        "website": "https://asana.com"
+      },
+      {
+        "name": "monday.com",
+        "website": "https://monday.com"
+      }
+    ],
+    "brief": "Compare work management products, pricing conditions, target customers, integrations and positioning."
+  },
+  "claims": [
+    {
+      "company": "Notion",
+      "criterion": "product",
+      "text": "Notion combines docs, wikis, projects and databases in one workspace.",
+      "evidence_ids": [
+        "d42677669fdd11d7"
+      ],
+      "quote": "brings docs, wikis, projects, and databases together in one place",
+      "kind": "fact"
+    },
+    {
+      "company": "Notion",
+      "criterion": "pricing",
+      "text": "The Notion product page states that paid plans start at $10 per member per month, billed annually.",
+      "evidence_ids": [
+        "d42677669fdd11d7"
+      ],
+      "quote": "Paid plans start at $10 per member per month (billed annually)",
+      "kind": "fact"
+    },
+    {
+      "company": "Notion",
+      "criterion": "customers",
+      "text": "Notion reports use by 62% of Fortune 100 companies.",
+      "evidence_ids": [
+        "e8dd9abbc3907931"
+      ],
+      "quote": "62% of Fortune 100 use Notion",
+      "kind": "fact"
+    },
+    {
+      "company": "Notion",
+      "criterion": "integrations",
+      "text": "Notion Projects can sync issues from Jira, GitHub and GitLab.",
+      "evidence_ids": [
+        "c71598040ed70303"
+      ],
+      "quote": "syncing issues from Jira, GitHub, and GitLab",
+      "kind": "fact"
+    },
+    {
+      "company": "Asana",
+      "criterion": "customers",
+      "text": "An Asana case study reports Gojek saving an estimated 3,486 work days annually.",
+      "evidence_ids": [
+        "1794233c54c67cad"
+      ],
+      "quote": "Gojek saves a total estimated 3,486 work days annually",
+      "kind": "fact"
+    },
+    {
+      "company": "Asana",
+      "criterion": "integrations",
+      "text": "The Asana app directory lists a Gmail integration for creating tasks from email.",
+      "evidence_ids": [
+        "8378b5fcc2ad8853"
+      ],
+      "quote": "Turn emails into actionable, trackable tasks in Asana without leaving your Gmail inbox",
+      "kind": "fact"
+    },
+    {
+      "company": "Asana",
+      "criterion": "positioning",
+      "text": "Asana presents its product as connecting organizational goals to team work.",
+      "evidence_ids": [
+        "a8fcd7e8752d0e31"
+      ],
+      "quote": "Asana connects company-wide goals to the work needed to achieve them",
+      "kind": "inference"
+    },
+    {
+      "company": "monday.com",
+      "criterion": "product",
+      "text": "monday.com describes AI credits as reflecting the complexity of each task.",
+      "evidence_ids": [
+        "acb994f7e925a95d"
+      ],
+      "quote": "credits reflect the complexity of each task",
+      "kind": "fact"
+    },
+    {
+      "company": "monday.com",
+      "criterion": "pricing",
+      "text": "monday.com states that paid plans start from three users.",
+      "evidence_ids": [
+        "acb994f7e925a95d"
+      ],
+      "quote": "Plans start from 3 users.",
+      "kind": "fact"
+    },
+    {
+      "company": "monday.com",
+      "criterion": "customers",
+      "text": "When collected, monday.com reported around 250,000 customers worldwide.",
+      "evidence_ids": [
+        "0a0589d7a58f453f"
+      ],
+      "quote": "Around 250,000 customers worldwide rely on monday.com",
+      "kind": "fact"
+    },
+    {
+      "company": "monday.com",
+      "criterion": "integrations",
+      "text": "monday.com describes integrations as connecting its Work OS to existing tools.",
+      "evidence_ids": [
+        "fafccee320a3f5c3"
+      ],
+      "quote": "connect our Work OS with the tools you already use",
+      "kind": "fact"
+    },
+    {
+      "company": "monday.com",
+      "criterion": "positioning",
+      "text": "monday.com positions its AI Workspace as connecting work across business functions.",
+      "evidence_ids": [
+        "0a2491b2354f738b"
+      ],
+      "quote": "monday\u2019s AI Workspace connects projects, processes, resources, goals, and AI-powered capabilities across business functions in one workspace.",
+      "kind": "inference"
+    },
+    {
+      "company": "Notion",
+      "criterion": "positioning",
+      "text": "No positioning claim selected for this public excerpt.",
+      "evidence_ids": [],
+      "quote": "",
+      "kind": "unknown"
+    },
+    {
+      "company": "Asana",
+      "criterion": "product",
+      "text": "No product claim selected for this public excerpt.",
+      "evidence_ids": [],
+      "quote": "",
+      "kind": "unknown"
+    },
+    {
+      "company": "Asana",
+      "criterion": "pricing",
+      "text": "Confirm current plan prices and billing conditions against official pricing.",
+      "evidence_ids": [],
+      "quote": "",
+      "kind": "unknown"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "d42677669fdd11d7",
+      "company": "Notion",
+      "url": "https://www.notion.com/product/notion",
+      "title": "Selected excerpts: What is Notion? | Notion",
+      "text": "brings docs, wikis, projects, and databases together in one place\n\nPaid plans start at $10 per member per month (billed annually)",
+      "fetched_at": "2026-11-13T12:13:50.811676+00:00",
+      "content_hash": "3335bb15bdb7b6aa37488f043ae47584c15b2f3bb462dc1211cdbab7c422866b",
+      "published_at": null
+    },
+    {
+      "id": "e8dd9abbc3907931",
+      "company": "Notion",
+      "url": "https://www.notion.com/customers",
+      "title": "Selected excerpts: Notion Customer Stories",
+      "text": "62% of Fortune 100 use Notion",
+      "fetched_at": "2026-11-13T12:13:50.811676+00:00",
+      "content_hash": "5583fba7078dd042cacb4a2063033983afc0fa6ce342222e87c72367f5d69225",
+      "published_at": null
+    },
+    {
+      "id": "c71598040ed70303",
+      "company": "Notion",
+      "url": "https://www.notion.com/blog/partner-apps-notion-projects",
+      "title": "Selected excerpts: Make your Notion projects more powerful and connected with integrations",
+      "text": "syncing issues from Jira, GitHub, and GitLab",
+      "fetched_at": "2026-11-13T12:13:50.811676+00:00",
+      "content_hash": "9dfc891d2a18b0d3f9dc8ea59bb6b34175d51ce5b0ef06ac81d8781d25552b33",
+      "published_at": null
+    },
+    {
+      "id": "1794233c54c67cad",
+      "company": "Asana",
+      "url": "https://asana.com/case-study/gojek",
+      "title": "Selected excerpts: Asana Case Study - Gojek \u2022 Asana",
+      "text": "Gojek saves a total estimated 3,486 work days annually",
+      "fetched_at": "2026-11-13T12:13:50.811676+00:00",
+      "content_hash": "3120b63d2f0b794bc5dbe2d1af74f0705a134201496e919914f6d5ad82c39b99",
+      "published_at": null
+    },
+    {
+      "id": "8378b5fcc2ad8853",
+      "company": "Asana",
+      "url": "https://asana.com/apps",
+      "title": "Selected excerpts: Asana Apps and Integrations \u2022 Asana",
+      "text": "Turn emails into actionable, trackable tasks in Asana without leaving your Gmail inbox",
+      "fetched_at": "2026-11-13T12:13:50.811676+00:00",
+      "content_hash": "ddfd01b4ab8f0855051539cea1ffb2d3c640899149c1aff6a399ac8421a7486b",
+      "published_at": null
+    },
+    {
+      "id": "a8fcd7e8752d0e31",
+      "company": "Asana",
+      "url": "https://asana.com/product/use-asana",
+      "title": "Selected excerpts: Asana Work Management - Features, Uses & Product \u2022 Asana",
+      "text": "Asana connects company-wide goals to the work needed to achieve them",
+      "fetched_at": "2026-11-13T12:13:50.811676+00:00",
+      "content_hash": "f98a592f485f0eb8ffdec747e533e9d453225801987aa28aba32e59b24c5858c",
+      "published_at": null
+    },
+    {
+      "id": "acb994f7e925a95d",
+      "company": "monday.com",
+      "url": "https://monday.com/pricing",
+      "title": "Selected excerpts: monday.com pricing and plans",
+      "text": "credits reflect the complexity of each task\n\nPlans start from 3 users.",
+      "fetched_at": "2026-11-13T12:13:50.811676+00:00",
+      "content_hash": "a3ab3e3814fff4b0713bc771d54c2f28af227ca4dbbb289879bf5fb8bd94bead",
+      "published_at": null
+    },
+    {
+      "id": "0a0589d7a58f453f",
+      "company": "monday.com",
+      "url": "https://monday.com/w/customer-stories",
+      "title": "Selected excerpts: Customer stories | monday.com",
+      "text": "Around 250,000 customers worldwide rely on monday.com",
+      "fetched_at": "2026-11-13T12:13:50.811676+00:00",
+      "content_hash": "1d2d31adf6515bae112a29852eb4dc155a1a665907df53a65e54e26f791b2878",
+      "published_at": null
+    },
+    {
+      "id": "fafccee320a3f5c3",
+      "company": "monday.com",
+      "url": "https://monday.com/blog/product/monday-com-integrations-connecting-our-work-os-with-the-tools-you-already-use",
+      "title": "Selected excerpts: monday.com integrations: connecting our Work OS with the tools you already use | monday.com Blog",
+      "text": "connect our Work OS with the tools you already use",
+      "fetched_at": "2026-11-13T12:13:50.811676+00:00",
+      "content_hash": "370a6cae3996a31626be35452c64c950e2fd00c20cff4333b5b8324b65ca2985",
+      "published_at": null
+    },
+    {
+      "id": "0a2491b2354f738b",
+      "company": "monday.com",
+      "url": "https://monday.com/blog/project-management/monday-com-alternatives",
+      "title": "Selected excerpts: monday.com Alternatives: 15 Platforms Compared (2026)",
+      "text": "monday\u2019s AI Workspace connects projects, processes, resources, goals, and AI-powered capabilities across business functions in one workspace.",
+      "fetched_at": "2026-11-13T12:13:50.811676+00:00",
+      "content_hash": "3a9064a7058d36f5b16584f4700bc5c404c6124abbc2d260ab4fe5bab6ec9061",
+      "published_at": null
+    }
+  ],
+  "warnings": [
+    "Agent-curated source excerpts for demonstration; this is not the raw generated report or a human-expert-reviewed analysis.",
+    "Three comparison cells are intentionally left unknown. Confirm freshness, pricing conditions and vendor self-reported statements before use."
+  ],
+  "manifest": {
+    "sample_origin": "Agent-selected, narrowed claims from the live source corpus; not raw model output",
+    "parent_source_snapshot_hash": "dcf126d0f9519a96c1fc1762c350face358bb5c61365e31b9ec03e919b85c5eb",
+    "semantic_review": "pending human review",
+    "kernel_version": 2,
+    "retained_identifiers": "Original chunk IDs and full-document hashes point back to the private frozen corpus",
+    "public_quote_limit": "At most 25 quoted words per source page",
+    "parent_run": {
+      "request_hash": "22a4050825b04adea9bc756e7699706ad39fe5a1f6bceb62e3d9cf3190fce001",
+      "settings": {
+        "max_searches": 30,
+        "max_documents": 30,
+        "rounds": 0,
+        "retrieval": "hybrid",
+        "model": "Qwen/Qwen3-4B-Instruct-2507",
+        "embedding": "intfloat/multilingual-e5-small"
+      },
+      "source_snapshot_hash": "dcf126d0f9519a96c1fc1762c350face358bb5c61365e31b9ec03e919b85c5eb",
+      "model_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "duration_seconds": 659.016,
+      "search_calls_total": 0,
+      "collection_search_calls": 30,
+      "collection_timestamp": "2026-11-13T12:13:50.811676+00:00",
+      "input_tokens": 48758,
+      "output_tokens": 3823,
+      "citation_check": "Reference and quote integrity only; semantic review required"
+    },
+    "parent_runtime": {
+      "gpu": "Tesla T4",
+      "duration_seconds": 659.089564029,
+      "versions": {
+        "torch": "2.11.0+cu130",
+        "transformers": "4.57.6",
+        "sentence-transformers": "5.7.0",
+        "langgraph": "1.2.17",
+        "faiss-cpu": "1.16.0",
+        "marketlens": "0.1.0.dev0"
+      },
+      "status": "partial",
+      "claims": 30,
+      "evidence_chunks": 200
+    }
+  },
+  "status": "partial"
+}

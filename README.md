@@ -2,7 +2,7 @@
 
 Evidence-linked company research for product and competitive analysis. Enter 2–3 company websites; obtain an English comparison covering product, pricing, customers, integrations and positioning. Inspect the retained excerpt behind each cited claim.
 
-**Status:** local lint, types, package build, and 14 unit/integration tests pass. A real Kaggle GPU smoke run completed; a revised run is in progress. A small retrieval diagnostic is measured below; human report review remains a release requirement.
+**Status:** local lint, types, package build, and 15 unit/integration tests pass. Two real Kaggle GPU smoke runs completed. A small retrieval diagnostic is measured below; human report review remains a release requirement.
 
 ## Quick start
 
@@ -51,9 +51,17 @@ flowchart LR
 
 Reports include claims, source excerpts, collection timestamps and limitations. SQLite retains cache/checkpoint state; FAISS stores the live dense index. Website text is treated as untrusted data. Citation checks validate identifiers and exact quotes; semantic support is evaluated separately.
 
+## Public demo
+
+[Read the curated report](examples/reports/saas-sample.md) · [Download the 2-minute walkthrough](docs/demo/walkthrough.mp4) · [English captions](docs/demo/walkthrough.srt)
+
+![Comparison viewer with curated source excerpts and visible unknown cells](docs/demo/comparison.png)
+
+Run `marketlens view examples/reports/saas-sample.json` to inspect the public example. It contains agent-selected and narrowed claims from the live source corpus, with at most 25 quoted words per source page. It is **not the raw LLM report or a human-expert-reviewed analysis**. The silent walkthrough holds four actual viewer states for 30 seconds each; it is not a continuous screen recording. Full corpora, checkpoints and the 30-record review sheet remain private/local.
+
 ## Measured results
 
-A real-source smoke run completed on Tesla T4: 29 claim records across 15 comparison cells, 129 evidence chunks, and 623.6 seconds of pipeline time. Three records were converted to unknown after citation checks. This demonstrates execution, not semantic accuracy.
+A real-source smoke run completed on Tesla T4: 29 claim records across 15 comparison cells, 129 evidence chunks, and 623.6 seconds of pipeline time. Three records were converted to unknown after citation checks. The revised run produced 30 records (21 retained, 9 unknown) across 12/15 covered cells in 659.1 seconds on T4, using 200 chunks. Both demonstrate execution, not semantic accuracy.
 
 On a separate 202-chunk frozen corpus, the following diagnostic used **20 agent-curated test questions**, each with one known supporting chunk:
 

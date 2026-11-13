@@ -11,3 +11,9 @@ The public repository is https://github.com/An-devAI/MarketLens. Use the configu
 Before a release: run offline CI checks; complete the Kaggle smoke run and human review; update measured results and package version; create an annotated v0.1.0 tag and GitHub Release with report, metrics and demo video. Initial development version is 0.1.0.dev0; do not publish a completed release until live acceptance passes.
 
 A separate reference checkout lives outside this repository. Fork/clone setup and provenance are documented only in INTRODUCTION.md. Do not commit model weights, API keys, caches, full checkpoint databases or generated live corpora. Use release artifacts for reviewed output bundles.
+
+## Kaggle CLI and review handoff
+
+The authenticated CLI is installed with `uv tool install --with six kaggle`; the additional six dependency resolves an import error in CLI 2.2.5. Use `kaggle auth login` for another account. The snapshot notebook avoids transferring API credentials to Kaggle. Both GPU smoke versions completed; their summaries are recorded in docs/experiments/.
+
+The public sample is curated and deliberately incomplete. Use the private `outputs/kaggle-v2/claim-review.csv` to review all 30 raw records. A development-preview draft may hold package/demo artifacts, but v0.1.0 remains gated on independent claim and label review. No human review is implied by a passing CI job or exact quote matching.

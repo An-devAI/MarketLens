@@ -1,0 +1,19 @@
+1
+00:00:00,000 --> 00:00:30,000
+Compare three SaaS companies across five criteria.
+This is a curated source excerpt; semantic review is pending.
+
+2
+00:00:30,000 --> 00:01:00,000
+Inspect a finding, its exact quoted evidence,
+and the original source URL.
+
+3
+00:01:00,000 --> 00:01:30,000
+Inspect pricing alongside the unit and billing conditions.
+The source excerpt remains attached to the finding.
+
+4
+00:01:30,000 --> 00:02:00,000
+Inspect snapshot and parent-run provenance.
+Full model-generated reports still require semantic review.
