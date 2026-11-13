@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .models import AXES, ResearchRequest, Settings, build_search_query
+from .source_policy import POLICY_VERSION, source_decision
 from .storage import Cache, atomic_json
 
 
@@ -50,6 +51,7 @@ def collect_sources(request, output, settings=None, search=None):
         queries: dict[str, list[dict[str, str]]] = {}
         pages: dict[str, dict[str, str]] = {}
         errors: list[dict[str, str]] = []
+        excluded = []
         quota = max(1, settings.max_documents // len(request.companies))
         for company in request.companies:
             selected: set[str] = set()
@@ -61,6 +63,10 @@ def collect_sources(request, output, settings=None, search=None):
                         if len(queries[query]) >= max(1, quota // len(AXES)):
                             break
                         url = item["url"]
+                        decision = source_decision(url, company.website, axis)
+                        if not decision.allowed:
+                            excluded.append({"url": url, "company": company.name, "criterion": axis, "reason": decision.reason})
+                            continue
                         if url not in selected and len(selected) >= quota:
                             continue
                         if url not in pages and len(pages) >= settings.max_documents:
@@ -78,6 +84,7 @@ def collect_sources(request, output, settings=None, search=None):
                     cache.put("search_calls", search.calls)
         data = {"schema_version": 1, "request": request.model_dump(), "queries": queries,
                 "pages": pages, "search_calls": search.calls, "errors": errors,
+                "source_policy": POLICY_VERSION, "excluded_sources": excluded,
                 "collected_at": datetime.now(timezone.utc).isoformat()}
         atomic_json(target / "sources.json", data)
         return data

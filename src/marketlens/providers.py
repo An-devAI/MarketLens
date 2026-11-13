@@ -6,7 +6,7 @@ import time
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from .models import ClaimBatch
+from .models import AssessmentBatch, ClaimBatch
 
 
 def public_url(url):
@@ -134,3 +134,20 @@ class QwenModel:
             "educational advice, job requirements and unrelated products. Never invent URLs or evidence IDs.",
             {"company": company, "criterion": criterion, "brief": brief,
              "excerpts": [e.model_dump() for e in evidence]}, ClaimBatch).claims
+
+    def assess(self, records, evidence, brief=""):
+        ids = {eid for item in records for eid in item['claim']['evidence_ids']}
+        return self.structured(
+            "Assess each numbered finding using ONLY the cited context and quote. Check every "
+            "asserted entity, feature, quantity, unit, plan and billing condition. Text near a quote "
+            "may describe a different app: never transfer app Beta's capabilities to app Alpha. "
+            "A passage about one customer cannot establish another customer's use. For example, "
+            "'Alpha sends alerts. Beta creates tasks.' does not support 'Alpha creates tasks'. "
+            "Pricing must explicitly support its asserted product, plan, currency, unit and cadence. "
+            "Generic buying advice is not automatically a company's differentiator. Treat vendor "
+            "figures as vendor-reported, not independently verified. Mark supported only when all "
+            "propositions are supported by the cited context; otherwise unsupported or uncertain. "
+            "Return exactly one assessment for each input record, with a short factual reason. "
+            "Do not rewrite the claim or use outside knowledge. This review is not a human audit.",
+            {'records': records, 'brief': brief,
+             'contexts': [e.model_dump() for e in evidence if e.id in ids]}, AssessmentBatch)

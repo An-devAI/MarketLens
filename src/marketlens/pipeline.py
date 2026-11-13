@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Annotated, TypedDict
 
+from .audit import assess_claims
 from .models import (
     AXES,
     RETRIEVAL_QUERIES,
@@ -15,8 +16,9 @@ from .models import (
     Settings,
     build_search_query,
 )
-from .report import render, verify
+from .report import render, report_summary, verify
 from .retrieval import CachedEncoder, Retriever, chunk_document
+from .source_policy import POLICY_VERSION, source_decision
 from .storage import Cache, atomic_json
 
 
@@ -41,7 +43,7 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
     start = time.monotonic()
     fingerprint = hashlib.sha256(json.dumps({"request": request.model_dump(),
         "settings": settings.model_dump(), "retrieval_queries": RETRIEVAL_QUERIES,
-        "source_snapshot_hash": getattr(search, "snapshot_hash", None)}, sort_keys=True).encode()).hexdigest()
+        "source_policy": POLICY_VERSION, "source_snapshot_hash": getattr(search, "snapshot_hash", None)}, sort_keys=True).encode()).hexdigest()
     checkpoint = cache.get("checkpoint")
     if checkpoint and checkpoint["fingerprint"] != fingerprint:
         cache.close()
@@ -94,6 +96,10 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
                     if added >= max(1, settings.max_documents // len(request.companies) // len(AXES)):
                         break
                     url = item["url"]
+                    policy = source_decision(url, company.website, axis)
+                    if not policy.allowed:
+                        warnings.append(f"Excluded source {url}: {policy.reason}")
+                        continue
                     key = company_name + ":" + url
                     if key in documents or len(documents) >= settings.max_documents:
                         continue
@@ -115,8 +121,11 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
                         warnings.append(f"Source unavailable {url}: {type(exc).__name__}")
             except Exception as exc:
                 warnings.append(f"Search failed {company_name}/{axis}: {type(exc).__name__}")
-            retriever = Retriever(evidence, settings.retrieval, encoder)
+            eligible = [e for e in evidence if source_decision(e.url, company.website, axis).allowed]
+            retriever = Retriever(eligible, settings.retrieval, encoder)
             passages = retriever.search(RETRIEVAL_QUERIES[axis], company_name)
+            proposed: list[Claim] = []
+            assessments: list[dict] = []
             try:
                 proposed = model.analyze(company_name, axis, passages, brief=request.brief) if passages else []
                 accepted = []
@@ -128,13 +137,17 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
                     accepted.append(checked)
                     if not valid:
                         warnings.append(f"Rejected invalid citation for {company_name}/{axis}")
+                if settings.semantic_review and accepted:
+                    accepted, assessments = assess_claims(accepted, passages, request.companies, model, request.brief)
                 claims = [c for c in claims if (c.company, c.criterion) != (company_name, axis)]
                 claims.extend(accepted or [Claim(company=company_name, criterion=axis,
                     text="Insufficient verified evidence", kind="unknown")])
             except Exception as exc:
                 warnings.append(f"Analysis failed {company_name}/{axis}: {type(exc).__name__}")
             traces.append({"node": "researcher", "company": company_name, "criterion": axis,
-                           "retrieved": [e.id for e in passages]})
+                           "retrieved": [e.id for e in passages],
+                           "proposed_claims": [c.model_dump() for c in proposed],
+                           "assessments": assessments})
             cache.put("checkpoint", {"fingerprint": fingerprint,
                 "evidence": [e.model_dump() for e in evidence],
                 "claims": [c.model_dump() for c in claims], "warnings": warnings,
@@ -180,7 +193,10 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
                       "collection_timestamp": getattr(search, "collected_at", None),
                       "input_tokens": getattr(model, "input_tokens", 0),
                       "output_tokens": getattr(model, "output_tokens", 0),
-                      "citation_check": "Reference and quote integrity only; semantic review required"})
+                      "source_policy": POLICY_VERSION,
+                      "semantic_review": "model-assisted; human review pending" if settings.semantic_review else "disabled; human review pending",
+                      "citation_check": "Reference and quote integrity; model assessment is not human review"})
+        bundle.manifest["summary"] = report_summary(bundle)
         atomic_json(target / "report.json", bundle.model_dump())
         (target / "report.md").write_text(render(bundle))
         (target / "corpus.jsonl").write_text("".join(e.model_dump_json()+"\n" for e in evidence))

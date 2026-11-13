@@ -83,6 +83,7 @@ class Settings(BaseModel):
     max_searches: int = Field(default=30, ge=1, le=30)
     max_documents: int = Field(default=30, ge=1, le=30)
     rounds: int = Field(default=2, ge=0, le=2)
+    semantic_review: bool = True
     retrieval: Literal["bm25", "dense", "hybrid"] = "hybrid"
     model: str = "Qwen/Qwen3-4B-Instruct-2507"
     embedding: str = "intfloat/multilingual-e5-small"
@@ -96,3 +97,13 @@ class ReportBundle(BaseModel):
     warnings: list[str]
     manifest: dict
     status: Literal["complete", "partial"]
+
+
+class ClaimAssessment(BaseModel):
+    record: int = Field(ge=0)
+    verdict: Literal['supported', 'unsupported', 'uncertain']
+    reason: str = Field(min_length=1, max_length=1200)
+
+
+class AssessmentBatch(BaseModel):
+    assessments: list[ClaimAssessment] = Field(max_length=2)
