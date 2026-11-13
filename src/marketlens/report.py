@@ -1,4 +1,15 @@
+from collections import Counter
+
 from .models import AXES, Claim
+
+
+def report_summary(bundle):
+    kinds = dict(Counter(claim.kind for claim in bundle.claims))
+    retained = sum(claim.kind != 'unknown' for claim in bundle.claims)
+    covered = {(claim.company, claim.criterion) for claim in bundle.claims if claim.kind != 'unknown'}
+    return {'records': len(bundle.claims), 'retained': retained,
+            'unknown': len(bundle.claims) - retained, 'claim_kinds': kinds,
+            'covered_cells': len(covered), 'total_cells': len(bundle.request.companies) * len(AXES)}
 
 
 def verify(claim, evidence):
