@@ -1,21 +1,35 @@
 # MarketLens: introduction and provenance
 
-## References and reuse
+## Verified reference checkouts
 
-- https://github.com/langchain-ai/open_deep_research — supervisor/researcher orchestration reference. The override_reducer function in src/marketlens/pipeline.py is copied from state.py; bounded supervisor/researcher routing is adapted to company-scoped evidence. Search, model inference, storage, evaluation and report rendering are new implementations, not a copy of the entire original engine.
-- https://github.com/coleam00/context-engineering-intro — requirements/examples/PRP/validation workflow adapted for Codex using AGENTS.md. No Claude command files are used.
+Both repositories are complete local Git clones outside the product repository, with clean working trees verified on 2026-11-13. Their origin remotes point to the original repositories; they are not personal GitHub forks. These clones replace the earlier web-retrieved snapshots.
 
-## Reference checkout status
+| Reference | Repository | Checked-out commit |
+|---|---|---|
+| Research implementation | https://github.com/langchain-ai/open_deep_research | `1b7d2e80db9faa586165c60e09096dbbfd483a64` |
+| Context workflow | https://github.com/coleam00/context-engineering-intro | `a2d84b021cee1e2f4e77ba854bba0be8cb319035` |
 
-The reference directory is a source snapshot retrieved through the web reader, not a completed Git clone or GitHub fork. Shell DNS access and GitHub authentication are unavailable. Original commit SHA is unverified; source snapshot content hashes can be calculated locally. Do not claim a pinned upstream revision until the authenticated checkout has been completed and compared. Preserve snapshot files until that comparison is complete.
+The checked-out revisions above identify the source used for comparison. Keep them recorded when updating a reference checkout. The product remains an independent Git repository; reference histories and checkouts are not included in its commits or package distributions.
 
-To complete setup outside the product repository: authenticate with gh, run `gh repo fork langchain-ai/open_deep_research --clone=false`, clone your fork into a separate temporary sibling, compare it with the snapshot, then use that checkout as the reference directory. Record `git rev-parse HEAD` here and update the reuse table when adapting additional code.
+## Reuse and original contributions
 
-The product is a separate Git repository. Its contribution history begins with the actual product bootstrap and integrations; it does not relabel original commit history as personal work.
+| Product material | Reference material | Actual reuse |
+|---|---|---|
+| `src/marketlens/pipeline.py::override_reducer` | Research reference `src/open_deep_research/state.py::override_reducer` | Adapted override/append behavior; uses `+` instead of `operator.add`. Verified against the checked-out implementation. |
+| Bounded supervisor/researcher routing | Research reference `src/open_deep_research/deep_researcher.py` | Architecture adapted to company/criterion evidence gaps. The complete original agent loop has not been copied or integrated. |
+| `INITIAL.md`, `AGENTS.md`, examples and implementation PRP | Context reference `INITIAL.md` and `PRPs/templates/prp_base.md` | Requirements/examples/context/validation workflow adapted for Codex. No Claude instruction files or slash commands are used in the product. |
+| Search/model providers, hybrid retrieval, evidence storage, evaluation, report and viewer | Product implementation | New implementation; live model and GPU acceptance remain pending. |
+
+The current implementation should not be described as integrating the full reference research engine. Further reuse must be recorded here with its original revision and affected product modules.
+
+## Reference file integrity
+
+- `src/open_deep_research/deep_researcher.py` SHA-256: `af128d5d8773008d021b6ef7562e9fb90a45f7eb5e886483d1e6e835223275e0`.
+- `src/open_deep_research/state.py` SHA-256: `7a03f4a1d5132573ed306d403fd3478fe8916d955f3caa44a8d365877ac35d0e`.
 
 ## License notices
 
-The following notices are included intact for reused code and adapted materials. This document is included in package distributions.
+The following notices are reproduced from the verified checkouts for reused code and adapted workflow material. This document is included in package distributions. The isolated reference checkouts retain their original license files.
 
 ### Research reference
 
@@ -29,8 +43,10 @@ in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
+
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -51,8 +67,10 @@ in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
+
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -60,9 +78,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-
-## Snapshot integrity
-
-- `deep_researcher.py` SHA-256: `3659eeb818d0b6407b42334bd87980f5108be106f41869c84fed96fd7a8e4515`.
-- `state.py` SHA-256: `0b0b0516f7fdbb2bf823c59d7f5d1964a5d691886bcef392727a1578cd70f39a`.
