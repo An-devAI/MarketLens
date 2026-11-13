@@ -1,0 +1,16 @@
+{
+  "id": "truongan16/marketlens-fixed-report-audit",
+  "title": "MarketLens Fixed Report Audit",
+  "code_file": "kaggle_audit.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "truongan16/marketlens-audit-input"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

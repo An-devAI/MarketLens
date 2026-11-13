@@ -19,6 +19,9 @@ def main():
     collect = sub.add_parser("collect")
     collect.add_argument("request", type=Path)
     collect.add_argument("--output", default="outputs/collection")
+    audit = sub.add_parser("audit", help="Model-assisted review of a fixed report; requires CUDA")
+    audit.add_argument("report", type=Path)
+    audit.add_argument("--output", type=Path, default=Path("outputs/audit"))
     view = sub.add_parser("view")
     view.add_argument("bundle", type=Path)
     bench = sub.add_parser("evaluate")
@@ -28,7 +31,20 @@ def main():
     bench.add_argument("--split", default="test", choices=["dev", "test"])
     bench.add_argument("--output", default="outputs/metrics.json")
     args = parser.parse_args()
-    if args.command == "collect":
+    if args.command == "audit":
+        from .audit import audit_report
+        from .models import ReportBundle
+        from .providers import QwenModel
+        from .report import render, report_summary
+        from .storage import atomic_json
+        original = ReportBundle.model_validate_json(args.report.read_text())
+        bundle, decisions = audit_report(original, QwenModel(Settings().model))
+        args.output.mkdir(parents=True, exist_ok=True)
+        atomic_json(args.output / "report.json", bundle.model_dump())
+        atomic_json(args.output / "assessments.json", decisions)
+        (args.output / "report.md").write_text(render(bundle))
+        print(json.dumps(dict(report_summary(bundle), status=bundle.status)))
+    elif args.command == "collect":
         from .collection import collect_sources
         request = ResearchRequest.model_validate_json(args.request.read_text())
         data = collect_sources(request, args.output)
@@ -48,7 +64,8 @@ def main():
             bundle = run_research(request, output=args.output, search=search)
         else:
             bundle = run_research(request, output=args.output)
-        print(json.dumps({"status": bundle.status, "output": args.output, "warnings": bundle.warnings}, indent=2))
+        from .report import report_summary
+        print(json.dumps(dict(report_summary(bundle), status=bundle.status, output=args.output, warnings=bundle.warnings), indent=2))
     elif args.command == "evaluate":
         from .evaluation import evaluate
         evidence = [Evidence.model_validate_json(line) for line in args.corpus.read_text().splitlines() if line]

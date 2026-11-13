@@ -23,7 +23,7 @@ class IntegrationTests(unittest.TestCase):
             self.assertEqual(first.claims, resumed.claims)
             self.assertEqual(first.status, 'complete')
             report = render(first)
-            self.assertIn('[1](https://example.com/', report)
+            self.assertIn('[1](https://www.notion.com/__synthetic__/', report)
             self.assertNotIn(first.evidence[0].id, report)
             self.assertEqual(len(first.claims), 15)
             for claim in first.claims:

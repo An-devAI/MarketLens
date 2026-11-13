@@ -1,3 +1,4 @@
+import json
 import sys
 from pathlib import Path
 
@@ -44,3 +45,8 @@ with execution:
     traces = path.parent / "traces.jsonl"
     if traces.exists():
         st.code(traces.read_text(), language="json")
+
+    assessments = path.parent / "assessments.json"
+    if assessments.exists():
+        st.subheader("Claim assessments")
+        st.json(json.loads(assessments.read_text()))
