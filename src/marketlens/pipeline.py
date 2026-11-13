@@ -4,9 +4,17 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Annotated, TypedDict
-from urllib.parse import urlsplit
 
-from .models import AXES, Claim, Evidence, ReportBundle, ResearchPlan, Settings
+from .models import (
+    AXES,
+    RETRIEVAL_QUERIES,
+    Claim,
+    Evidence,
+    ReportBundle,
+    ResearchPlan,
+    Settings,
+    build_search_query,
+)
 from .report import render, verify
 from .retrieval import CachedEncoder, Retriever, chunk_document
 from .storage import Cache, atomic_json
@@ -32,7 +40,8 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
     cache = Cache(target / "cache.sqlite")
     start = time.monotonic()
     fingerprint = hashlib.sha256(json.dumps({"request": request.model_dump(),
-        "settings": settings.model_dump()}, sort_keys=True).encode()).hexdigest()
+        "settings": settings.model_dump(), "retrieval_queries": RETRIEVAL_QUERIES,
+        "source_snapshot_hash": getattr(search, "snapshot_hash", None)}, sort_keys=True).encode()).hexdigest()
     checkpoint = cache.get("checkpoint")
     if checkpoint and checkpoint["fingerprint"] != fingerprint:
         cache.close()
@@ -45,7 +54,7 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
         model = QwenModel(settings.model)
     if encoder is None and settings.retrieval != "bm25":
         from sentence_transformers import SentenceTransformer
-        encoder = SentenceTransformer(settings.embedding, device="cpu")
+        encoder = SentenceTransformer(settings.embedding, device="cpu", token=False)
     if encoder is not None:
         encoder = CachedEncoder(encoder)
     evidence = [Evidence.model_validate(e) for e in (checkpoint or {}).get("evidence", [])]
@@ -69,8 +78,7 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
         nonlocal claims
         for company_name, axis in state["missing"]:
             company = next(c for c in request.companies if c.name == company_name)
-            domain = urlsplit(company.website).hostname
-            query = f"site:{domain} {company.name} {axis}"
+            query = build_search_query(company, axis)
             if state["round"] > 0:
                 try:
                     plan = model.structured(
@@ -81,7 +89,10 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
                     warnings.append(f"Planning failed for {company_name}/{axis}: {exc}")
             try:
                 results = search.search(query)
+                added = 0
                 for item in results:
+                    if added >= max(1, settings.max_documents // len(request.companies) // len(AXES)):
+                        break
                     url = item["url"]
                     key = company_name + ":" + url
                     if key in documents or len(documents) >= settings.max_documents:
@@ -93,6 +104,7 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
                         text = search.fetch(url)
                         digest = hashlib.sha256(text.encode()).hexdigest()
                         documents.add(key)
+                        added += 1
                         if (company_name, digest) in hashes:
                             continue
                         hashes.add((company_name, digest))
@@ -104,9 +116,9 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
             except Exception as exc:
                 warnings.append(f"Search failed {company_name}/{axis}: {type(exc).__name__}")
             retriever = Retriever(evidence, settings.retrieval, encoder)
-            passages = retriever.search(axis + " " + request.brief, company_name)
+            passages = retriever.search(RETRIEVAL_QUERIES[axis], company_name)
             try:
-                proposed = model.analyze(company_name, axis, passages) if passages else []
+                proposed = model.analyze(company_name, axis, passages, brief=request.brief) if passages else []
                 accepted = []
                 for claim in proposed:
                     if claim.company != company_name or claim.criterion != axis:
@@ -160,6 +172,8 @@ def run_research(request, settings=None, output="outputs/latest", search=None, m
             warnings=list(dict.fromkeys(warnings)),
             status="complete" if len(complete) == len(request.companies)*len(AXES) else "partial",
             manifest={"request_hash": fingerprint, "settings": settings.model_dump(),
+                      "source_snapshot_hash": getattr(search, "snapshot_hash", None),
+                      "model_revision": getattr(model, "model_revision", None),
                       "duration_seconds": round(time.monotonic()-start, 3),
                       "search_calls_total": getattr(search, "calls", 0),
                       "collection_search_calls": getattr(search, "collection_search_calls", 0),

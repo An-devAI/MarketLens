@@ -36,13 +36,13 @@ class Retriever:
         self.evidence = evidence
         self.mode = mode
         self.encoder = encoder
-        self.docs = [tokens(e.text) for e in evidence]
+        self.docs = [tokens(e.title + " " + e.text) for e in evidence]
         self.length = sum(map(len, self.docs)) / max(len(self.docs), 1)
         self.vectors = None
         if mode != "bm25" and evidence:
             import faiss
             import numpy as np
-            vectors = np.asarray(encoder.encode(["passage: " + e.text for e in evidence],
+            vectors = np.asarray(encoder.encode(["passage: " + e.title + "\n" + e.text for e in evidence],
                                   normalize_embeddings=True), dtype="float32")
             self.vectors = faiss.IndexFlatIP(vectors.shape[1])
             self.vectors.add(vectors)

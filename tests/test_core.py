@@ -38,6 +38,9 @@ class CoreTests(unittest.TestCase):
         claim = Claim(company="A", criterion="pricing", text="ten dollars",
                       evidence_ids=[evidence[0].id], quote="ten dollars")
         self.assertTrue(verify(claim, evidence)[1])
+        unrelated = chunk_document("A", "https://a.example/other", "other", "unrelated content", "today")
+        extra_citation = claim.model_copy(update={"evidence_ids": [evidence[0].id, unrelated[0].id]})
+        self.assertFalse(verify(extra_citation, evidence + unrelated)[1])
         for update in ({"evidence_ids": ["invented"]}, {"quote": "free forever"}, {"company": "B"}):
             self.assertFalse(verify(claim.model_copy(update=update), evidence)[1])
 

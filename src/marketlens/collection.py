@@ -4,9 +4,8 @@ import hashlib
 import json
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urlsplit
 
-from .models import AXES, ResearchRequest, Settings
+from .models import AXES, ResearchRequest, Settings, build_search_query
 from .storage import Cache, atomic_json
 
 
@@ -14,7 +13,9 @@ class SnapshotSearch:
     """Read a collected snapshot without credentials or outbound search calls."""
 
     def __init__(self, path):
-        data = json.loads(Path(path).read_text())
+        raw = Path(path).read_bytes()
+        self.snapshot_hash = hashlib.sha256(raw).hexdigest()
+        data = json.loads(raw)
         self.request = ResearchRequest.model_validate(data["request"])
         self.queries = data["queries"]
         self.pages = data["pages"]
@@ -53,10 +54,12 @@ def collect_sources(request, output, settings=None, search=None):
         for company in request.companies:
             selected: set[str] = set()
             for axis in AXES:
-                query = f"site:{urlsplit(company.website).hostname} {company.name} {axis}"
+                query = build_search_query(company, axis)
                 queries[query] = []
                 try:
                     for item in search.search(query):
+                        if len(queries[query]) >= max(1, quota // len(AXES)):
+                            break
                         url = item["url"]
                         if url not in selected and len(selected) >= quota:
                             continue

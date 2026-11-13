@@ -1185,6 +1185,11 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+collection = [
+    { name = "httpx" },
+    { name = "tavily-python" },
+    { name = "trafilatura" },
+]
 dev = [
     { name = "build" },
     { name = "commitizen" },
@@ -1216,6 +1221,7 @@ requires-dist = [
     { name = "commitizen", marker = "extra == 'dev'", specifier = ">=4,<5" },
     { name = "faiss-cpu", marker = "extra == 'research'", specifier = ">=1.8" },
     { name = "faiss-cpu", marker = "extra == 'validation'", specifier = ">=1.8" },
+    { name = "httpx", marker = "extra == 'collection'", specifier = ">=0.27,<1" },
     { name = "httpx", marker = "extra == 'research'", specifier = ">=0.27,<1" },
     { name = "langgraph", marker = "extra == 'research'", specifier = ">=0.5,<2" },
     { name = "langgraph", marker = "extra == 'validation'", specifier = ">=0.5,<2" },
@@ -1226,12 +1232,14 @@ requires-dist = [
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.9" },
     { name = "sentence-transformers", marker = "extra == 'research'", specifier = ">=3,<6" },
     { name = "streamlit", marker = "extra == 'viewer'", specifier = ">=1.40,<2" },
+    { name = "tavily-python", marker = "extra == 'collection'", specifier = ">=0.5,<1" },
     { name = "tavily-python", marker = "extra == 'research'", specifier = ">=0.5,<1" },
     { name = "torch", marker = "extra == 'research'", specifier = ">=2.4" },
+    { name = "trafilatura", marker = "extra == 'collection'", specifier = ">=2,<3" },
     { name = "trafilatura", marker = "extra == 'research'", specifier = ">=2,<3" },
     { name = "transformers", marker = "extra == 'research'", specifier = ">=4.51,<5" },
 ]
-provides-extras = ["research", "validation", "viewer", "dev"]
+provides-extras = ["collection", "research", "validation", "viewer", "dev"]
 
 [[package]]
 name = "markupsafe"
