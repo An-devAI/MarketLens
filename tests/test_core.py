@@ -1,11 +1,13 @@
 import tempfile
 import unittest
+from collections import Counter
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
 from marketlens.demo import DemoModel, DemoSearch
 from marketlens.evaluation import evaluate
-from marketlens.models import Claim, Company, ResearchRequest, Settings
+from marketlens.models import Claim, Company, ReportBundle, ResearchRequest, Settings
 from marketlens.pipeline import override_reducer, run_research
 from marketlens.providers import TavilySearch
 from marketlens.report import verify
@@ -89,6 +91,18 @@ class CoreTests(unittest.TestCase):
                         search.search("second")
                 self.assertEqual(search.calls, 2)
             cache.close()
+
+    def test_public_sample_references_and_quote_budget(self):
+        sample = ReportBundle.model_validate_json(Path('examples/reports/saas-sample.json').read_text())
+        budget = Counter()
+        for evidence in sample.evidence:
+            budget[evidence.url] += len(evidence.text.split())
+        self.assertTrue(all(words <= 25 for words in budget.values()))
+        self.assertIn('sample_origin', sample.manifest)
+        self.assertEqual(sample.status, 'partial')
+        for claim in sample.claims:
+            if claim.kind != 'unknown':
+                self.assertTrue(verify(claim, sample.evidence)[1])
 
     def test_override_reducer(self):
         self.assertEqual(override_reducer([1], [2]), [1, 2])

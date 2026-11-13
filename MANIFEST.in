@@ -1,0 +1,6 @@
+include AGENTS.md INITIAL.md
+recursive-include examples *.json *.jsonl *.md
+recursive-include PRPs *.md
+recursive-include notebooks *.ipynb *.json
+recursive-include scripts *.py
+recursive-include docs *.md *.json

@@ -16,7 +16,8 @@ bundle = ReportBundle.model_validate_json(path.read_text())
 if any("SYNTHETIC" in e.title for e in bundle.evidence):
     st.warning("Synthetic demonstration — not a real company analysis")
 else:
-    st.caption("Generated report · semantic review pending")
+    label = "Curated source excerpts" if "sample_origin" in bundle.manifest else "Generated report"
+    st.caption(label + " · semantic review pending")
 company_metric, source_metric, finding_metric = st.columns(3)
 company_metric.metric("Companies", len(bundle.request.companies))
 source_metric.metric("Source pages", len({e.url for e in bundle.evidence}))

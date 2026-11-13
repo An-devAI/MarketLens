@@ -17,3 +17,9 @@ The checked-in examples/real-questions.jsonl contains 10 Notion development ques
 Rebuild the corpus from the exact private snapshot with `python scripts/build_benchmark_corpus.py SNAPSHOT --output outputs/label-corpus.jsonl`, then run `marketlens evaluate outputs/label-corpus.jsonl examples/real-questions.jsonl --all-modes --output outputs/diagnostic.json`. Verify the source and corpus hashes in docs/experiments/retrieval-diagnostic.json before comparing scores. The raw website corpus remains private; recollecting live pages can change chunk identifiers and invalidate labels.
 
 Measured labeled-chunk Recall@5: BM25 0.75, dense 0.90, hybrid 0.95 on n=20. With one positive label per query this is also a known-positive hit rate. These retrieval scores do not establish report faithfulness or generator abstention. Unknown controls are provided for subsequent generator review, not counted as passed cases.
+
+## Model-report review
+
+The second GPU run retained 21 non-unknown records and rejected or withheld 9; it covered 12 of 15 company/criterion cells. Identifier/quote integrity is not sufficient for subject attribution: some retrieved sources are community posts or comparison articles discussing other vendors. Inspect whether every part of a claim is supported, whether pricing includes the right plan and cadence, and whether a vendor self-report is presented as such. The private `outputs/kaggle-v2/claim-review.csv` provides 30 rows with blank human verdicts; it must not be reported as a completed human audit.
+
+The 20 diagnostic test-query retrieval inputs for Asana and monday.com are byte-for-byte identical in title/text/ID order between the 202-chunk diagnostic corpus and the 200-chunk second GPU corpus. Their difference is two duplicate Notion development chunks removed by the pipeline. The artifact hashes identify the exact evaluated corpus.
