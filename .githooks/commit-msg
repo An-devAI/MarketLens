@@ -1,0 +1,3 @@
+#!/bin/sh
+set -eu
+uv run --no-sync cz check --commit-msg-file "$1"
