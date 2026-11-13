@@ -2,12 +2,12 @@
 
 Evidence-linked company research for product and competitive analysis. Enter 2–3 company websites; obtain an English comparison covering product, pricing, customers, integrations and positioning. Inspect the retained excerpt behind each cited claim.
 
-**Status:** local lint, types, package build, and 12 unit/integration tests pass. A private Kaggle GPU smoke run is in progress. Real-source benchmark and human claim review remain acceptance steps.
+**Status:** local lint, types, package build, and 14 unit/integration tests pass. A real Kaggle GPU smoke run completed; a revised run is in progress. A small retrieval diagnostic is measured below; human report review remains a release requirement.
 
 ## Quick start
 
 ```bash
-uv sync --frozen --extra dev --extra validation --extra viewer
+uv sync --frozen --extra dev --extra validation --extra viewer --extra collection
 source .venv/bin/activate
 marketlens research examples/request.json --demo --output outputs/demo
 marketlens evaluate outputs/demo/corpus.jsonl examples/synthetic-questions.jsonl
@@ -50,6 +50,20 @@ flowchart LR
 ```
 
 Reports include claims, source excerpts, collection timestamps and limitations. SQLite retains cache/checkpoint state; FAISS stores the live dense index. Website text is treated as untrusted data. Citation checks validate identifiers and exact quotes; semantic support is evaluated separately.
+
+## Measured results
+
+A real-source smoke run completed on Tesla T4: 29 claim records across 15 comparison cells, 129 evidence chunks, and 623.6 seconds of pipeline time. Three records were converted to unknown after citation checks. This demonstrates execution, not semantic accuracy.
+
+On a separate 202-chunk frozen corpus, the following diagnostic used **20 agent-curated test questions**, each with one known supporting chunk:
+
+| Retrieval | Labeled-chunk Recall@5 | MRR@5 |
+|---|---:|---:|
+| BM25 | 0.75 | 0.554 |
+| Dense | 0.90 | 0.662 |
+| Hybrid / RRF | 0.95 | 0.717 |
+
+These are small diagnostic results, not an independently judged benchmark. The 10 development queries concern Notion; the 20 test queries concern Asana and monday.com. Equivalent supporting chunks may be unlabeled. Five unanswerable controls are excluded from retrieval averages. Source authorship, claim meaning, pricing context and freshness still require review. See docs/evaluation.md and docs/experiments/ for exact hashes, runtime versions and limitations.
 
 ## Validation and portfolio
 

@@ -1,0 +1,30 @@
+{
+  "experiment": "gpu-smoke-v1",
+  "kernel_version": 1,
+  "runtime": {
+    "gpu": "Tesla T4",
+    "duration_seconds": 623.606347463,
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "transformers": "4.57.6",
+      "sentence-transformers": "5.7.0",
+      "langgraph": "1.2.17",
+      "faiss-cpu": "1.16.0",
+      "marketlens": "0.1.0.dev0"
+    },
+    "status": "complete",
+    "claims": 29,
+    "evidence_chunks": 129
+  },
+  "claim_kinds": {
+    "fact": 19,
+    "inference": 7,
+    "unknown": 3
+  },
+  "warnings": [
+    "Rejected invalid citation for Notion/positioning",
+    "Rejected invalid citation for Asana/customers",
+    "Rejected invalid citation for monday.com/positioning"
+  ],
+  "note": "Smoke execution only; no human semantic review or retrieval quality score is implied."
+}
