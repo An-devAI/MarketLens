@@ -4,6 +4,7 @@
 A reproducible package that researches a named company set, retains evidence and exports a comparison bundle inspectable on CPU.
 
 ## Context
+When changing source eligibility or claim assessment, read PRPs/source-quality-audit.md.
 Read INITIAL.md, the typed models, demo providers and tests/test_core.py before editing the pipeline. Read INTRODUCTION.md before adapting reference code. Read docs/evaluation.md before interpreting benchmark results.
 
 ## Execution order

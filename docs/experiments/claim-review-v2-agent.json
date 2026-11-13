@@ -1,0 +1,304 @@
+{
+  "report_sha256": "48a91eac56e4bcb807f4dbdeee50689cd0b9de001bb315a0e622c4a316737941",
+  "reviewer": "coding agent; not independent human review",
+  "scope": "Frozen cited contexts only; current real-world prices and vendor claims were not independently verified",
+  "record_count": 30,
+  "original_kinds": {
+    "fact": 12,
+    "inference": 10,
+    "unknown": 8
+  },
+  "verdicts": {
+    "supported": 10,
+    "partial": 7,
+    "unknown": 8,
+    "inconclusive_source": 4,
+    "unsupported": 1
+  },
+  "records": [
+    {
+      "record": 0,
+      "company": "Notion",
+      "criterion": "product",
+      "verdict": "supported",
+      "reason": "The cited chunk explicitly describes composable workflows and Agile/Waterfall/hybrid methods.",
+      "evidence_ids": [
+        "778e6938b7c9ee74"
+      ]
+    },
+    {
+      "record": 1,
+      "company": "Notion",
+      "criterion": "product",
+      "verdict": "partial",
+      "reason": "Docs/wikis/projects/databases and flexible blocks are supported; timelines and status updates are not established by this cited chunk.",
+      "evidence_ids": [
+        "d42677669fdd11d7"
+      ]
+    },
+    {
+      "record": 2,
+      "company": "Notion",
+      "criterion": "pricing",
+      "verdict": "supported",
+      "reason": "The vendor product-page statement explicitly includes the amount, per-member/per-month unit and annual billing. Treat it as vendor-reported.",
+      "evidence_ids": [
+        "d42677669fdd11d7"
+      ]
+    },
+    {
+      "record": 3,
+      "company": "Notion",
+      "criterion": "pricing",
+      "verdict": "supported",
+      "reason": "The cited pricing context describes paid-seat reuse, increases and exchanges with the same total seat count.",
+      "evidence_ids": [
+        "407525cb189b3eda"
+      ]
+    },
+    {
+      "record": 4,
+      "company": "Notion",
+      "criterion": "customers",
+      "verdict": "supported",
+      "reason": "Matches a vendor-reported adoption figure; not independently verified market data.",
+      "evidence_ids": [
+        "e8dd9abbc3907931"
+      ]
+    },
+    {
+      "record": 5,
+      "company": "Notion",
+      "criterion": "customers",
+      "verdict": "supported",
+      "reason": "The customer-page context supports this vendor-reported YC adoption figure; not independent verification.",
+      "evidence_ids": [
+        "e8dd9abbc3907931"
+      ]
+    },
+    {
+      "record": 6,
+      "company": "Notion",
+      "criterion": "integrations",
+      "verdict": "supported",
+      "reason": "The cited context separates Slack workflow actions from supported whiteboard tools, including Miro.",
+      "evidence_ids": [
+        "fb83f6656973913d"
+      ]
+    },
+    {
+      "record": 7,
+      "company": "Notion",
+      "criterion": "integrations",
+      "verdict": "supported",
+      "reason": "The full cited context names the development integrations and Figma previews.",
+      "evidence_ids": [
+        "c71598040ed70303"
+      ]
+    },
+    {
+      "record": 8,
+      "company": "Notion",
+      "criterion": "positioning",
+      "verdict": "unknown",
+      "reason": "The original pipeline withheld the finding; no supported assertion remains.",
+      "evidence_ids": []
+    },
+    {
+      "record": 9,
+      "company": "Notion",
+      "criterion": "positioning",
+      "verdict": "unknown",
+      "reason": "The original pipeline withheld the finding; no supported assertion remains.",
+      "evidence_ids": []
+    },
+    {
+      "record": 10,
+      "company": "Asana",
+      "criterion": "product",
+      "verdict": "unknown",
+      "reason": "The original pipeline withheld the finding; no supported assertion remains.",
+      "evidence_ids": []
+    },
+    {
+      "record": 11,
+      "company": "Asana",
+      "criterion": "product",
+      "verdict": "unknown",
+      "reason": "The original pipeline withheld the finding; no supported assertion remains.",
+      "evidence_ids": []
+    },
+    {
+      "record": 12,
+      "company": "Asana",
+      "criterion": "pricing",
+      "verdict": "inconclusive_source",
+      "reason": "A community discussion is insufficient to establish current vendor pricing even though the quote matches.",
+      "evidence_ids": [
+        "56e539dd169e53fb"
+      ]
+    },
+    {
+      "record": 13,
+      "company": "Asana",
+      "criterion": "pricing",
+      "verdict": "inconclusive_source",
+      "reason": "Current pricing and cadence require a vendor-authored primary page, not a community discussion.",
+      "evidence_ids": [
+        "56e539dd169e53fb"
+      ]
+    },
+    {
+      "record": 14,
+      "company": "Asana",
+      "criterion": "customers",
+      "verdict": "partial",
+      "reason": "The cited Gojek passage does not establish Skai use; the multi-company finding exceeds its cited source.",
+      "evidence_ids": [
+        "1794233c54c67cad"
+      ]
+    },
+    {
+      "record": 15,
+      "company": "Asana",
+      "criterion": "customers",
+      "verdict": "unknown",
+      "reason": "The original pipeline withheld the finding; no supported assertion remains.",
+      "evidence_ids": []
+    },
+    {
+      "record": 16,
+      "company": "Asana",
+      "criterion": "integrations",
+      "verdict": "unsupported",
+      "reason": "Task creation in the passage belongs to Team Oclock, not the neighboring Webex listing.",
+      "evidence_ids": [
+        "cb2e96998d6b4e34"
+      ]
+    },
+    {
+      "record": 17,
+      "company": "Asana",
+      "criterion": "integrations",
+      "verdict": "partial",
+      "reason": "The chunk starts mid-listing and omits the connector identity; the exact provider and sync scope are not established.",
+      "evidence_ids": [
+        "0f072a1df74298ff"
+      ]
+    },
+    {
+      "record": 18,
+      "company": "Asana",
+      "criterion": "positioning",
+      "verdict": "inconclusive_source",
+      "reason": "A forum discussion about changing mission wording cannot establish the current official positioning.",
+      "evidence_ids": [
+        "0dd2444f71113237"
+      ]
+    },
+    {
+      "record": 19,
+      "company": "Asana",
+      "criterion": "positioning",
+      "verdict": "inconclusive_source",
+      "reason": "A community topic index with truncated previews is not an authoritative product-positioning source.",
+      "evidence_ids": [
+        "308a61aa6e608da6"
+      ]
+    },
+    {
+      "record": 20,
+      "company": "monday.com",
+      "criterion": "product",
+      "verdict": "unknown",
+      "reason": "The original pipeline withheld the finding; no supported assertion remains.",
+      "evidence_ids": []
+    },
+    {
+      "record": 21,
+      "company": "monday.com",
+      "criterion": "product",
+      "verdict": "supported",
+      "reason": "The vendor pricing FAQ describes AI credits, task complexity and usage-related charging.",
+      "evidence_ids": [
+        "acb994f7e925a95d"
+      ]
+    },
+    {
+      "record": 22,
+      "company": "monday.com",
+      "criterion": "pricing",
+      "verdict": "partial",
+      "reason": "The table supports a Basic seat amount but the cited chunk does not establish the asserted annual billing cadence.",
+      "evidence_ids": [
+        "f24d61c719293bdd"
+      ]
+    },
+    {
+      "record": 23,
+      "company": "monday.com",
+      "criterion": "pricing",
+      "verdict": "supported",
+      "reason": "The context supports Pro price/cadence and identifies CRM-specific features. Freshness still requires confirmation.",
+      "evidence_ids": [
+        "5ceb55f586b38956"
+      ]
+    },
+    {
+      "record": 24,
+      "company": "monday.com",
+      "criterion": "customers",
+      "verdict": "supported",
+      "reason": "Matches the customer-count statement on the vendor customer-stories page; retain vendor attribution.",
+      "evidence_ids": [
+        "0a0589d7a58f453f"
+      ]
+    },
+    {
+      "record": 25,
+      "company": "monday.com",
+      "criterion": "customers",
+      "verdict": "partial",
+      "reason": "One testimonial supports its own marketing-department result, not a generalized improvement across customers.",
+      "evidence_ids": [
+        "120837f3b7784e9f"
+      ]
+    },
+    {
+      "record": 26,
+      "company": "monday.com",
+      "criterion": "integrations",
+      "verdict": "unknown",
+      "reason": "The original pipeline withheld the finding; no supported assertion remains.",
+      "evidence_ids": []
+    },
+    {
+      "record": 27,
+      "company": "monday.com",
+      "criterion": "integrations",
+      "verdict": "unknown",
+      "reason": "The original pipeline withheld the finding; no supported assertion remains.",
+      "evidence_ids": []
+    },
+    {
+      "record": 28,
+      "company": "monday.com",
+      "criterion": "positioning",
+      "verdict": "partial",
+      "reason": "Cross-functional workspace positioning is supported; autonomous execution is not established in this cited context.",
+      "evidence_ids": [
+        "0a2491b2354f738b"
+      ]
+    },
+    {
+      "record": 29,
+      "company": "monday.com",
+      "criterion": "positioning",
+      "verdict": "partial",
+      "reason": "General platform-buying advice is interpreted as a company-specific differentiator without direct support.",
+      "evidence_ids": [
+        "f05a23f639cf6937"
+      ]
+    }
+  ]
+}
