@@ -2,13 +2,13 @@
 
 Evidence-linked company research for product and competitive analysis. Enter 2–3 company websites; obtain an English comparison covering product, pricing, customers, integrations and positioning. Inspect the retained excerpt behind each cited claim.
 
-**Status:** initial implementation; synthetic offline checks are available. Live Kaggle inference, real-source benchmark and human claim review remain acceptance steps.
+**Status:** local lint, types, package build, and 12 unit/integration tests pass. A private Kaggle GPU smoke run is in progress. Real-source benchmark and human claim review remain acceptance steps.
 
 ## Quick start
 
 ```bash
-uv venv
-uv pip install -e '.[dev,viewer]'
+uv sync --frozen --extra dev --extra validation --extra viewer
+source .venv/bin/activate
 marketlens research examples/request.json --demo --output outputs/demo
 marketlens evaluate outputs/demo/corpus.jsonl examples/synthetic-questions.jsonl
 marketlens view outputs/demo
@@ -19,6 +19,19 @@ The demo uses explicitly synthetic content, not company facts. The viewer can in
 ## Live research
 
 Install `.[research]` on a CUDA machine or follow notebooks/kaggle_research.ipynb. Set TAVILY_API_KEY in the environment, in `.env` in the working directory, or in Kaggle Secrets. Existing environment variables take precedence over `.env`; the local file is excluded from Git. Run `marketlens research examples/request.json --output outputs/live` from the product directory. Reuse the same output directory and identical settings to resume cached evidence and progress; use a new directory for a new request. Internet access is needed for models and collection. Default limits are 30 search calls, 30 documents and two follow-up rounds.
+
+## Kaggle without API keys
+
+```bash
+# From the product directory, with TAVILY_API_KEY in the ignored .env:
+marketlens collect examples/request.json --output outputs/live-collection
+# Run the following on a CUDA machine with the research extra installed:
+marketlens research examples/request.json --sources outputs/live-collection/sources.json --output outputs/live
+```
+
+The collector uses at most 30 Basic search attempts and balances the document budget across companies. Snapshots contain source text and URLs, not credentials. Snapshot research only reuses collected pages; follow-up queries cannot discover new pages. Citation timestamps preserve snapshot collection time.
+
+For Kaggle, build the wheel, run `python scripts/prepare_kaggle.py`, and upload the staged allowlist as a **private** Dataset. `notebooks/kaggle_snapshot.ipynb` consumes that dataset; `notebooks/kernel-metadata.json` defines the private GPU run. Run `kaggle kernels push -p notebooks --accelerator NvidiaTeslaT4 -t 3600`. The current account-specific metadata can be changed for another account. Dataset contents and generated reports remain private until reviewed.
 
 ## Architecture
 

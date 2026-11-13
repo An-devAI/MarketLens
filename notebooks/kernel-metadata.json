@@ -1,0 +1,16 @@
+{
+  "id": "truongan16/marketlens-live-research",
+  "title": "MarketLens Live Research",
+  "code_file": "kaggle_snapshot.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "truongan16/marketlens-runtime"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}
