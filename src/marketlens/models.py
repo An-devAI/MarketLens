@@ -4,6 +4,27 @@ from urllib.parse import urlsplit
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 AXES = ["product", "pricing", "customers", "integrations", "positioning"]
+RETRIEVAL_QUERIES = {
+    "product": "product features capabilities use cases tools",
+    "pricing": "pricing plans price monthly annually billed per seat USD currency",
+    "customers": "customers customer stories clients startups enterprise teams",
+    "integrations": "integrations connects applications API Slack Salesforce",
+    "positioning": "positioning mission differentiated unique value proposition platform",
+}
+
+
+SEARCH_TERMS = {
+    "product": "product features overview -inurl:jobs -inurl:careers -inurl:templates",
+    "pricing": "pricing plans monthly annually per seat",
+    "customers": "customer stories case studies customers -inurl:jobs -inurl:careers",
+    "integrations": "integrations apps connections supported tools",
+    "positioning": "about company mission platform -inurl:jobs -inurl:careers -inurl:blog -inurl:developers",
+}
+
+
+def build_search_query(company, criterion):
+    domain = urlsplit(company.website).hostname
+    return f"site:{domain} {company.name} {SEARCH_TERMS[criterion]} {criterion}"
 
 
 class Company(BaseModel):
@@ -51,7 +72,7 @@ class Claim(BaseModel):
 
 
 class ClaimBatch(BaseModel):
-    claims: list[Claim]
+    claims: list[Claim] = Field(max_length=2)
 
 
 class ResearchPlan(BaseModel):

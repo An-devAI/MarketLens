@@ -8,15 +8,22 @@ from marketlens.report import render
 
 st.set_page_config(page_title="MarketLens", layout="wide")
 st.title("MarketLens")
+st.caption("Company research with inspectable source evidence")
 path = Path(sys.argv[1])
 if path.is_dir():
     path = path / "report.json"
 bundle = ReportBundle.model_validate_json(path.read_text())
 if any("SYNTHETIC" in e.title for e in bundle.evidence):
     st.warning("Synthetic demonstration — not a real company analysis")
+else:
+    st.caption("Generated report · semantic review pending")
+company_metric, source_metric, finding_metric = st.columns(3)
+company_metric.metric("Companies", len(bundle.request.companies))
+source_metric.metric("Source pages", len({e.url for e in bundle.evidence}))
+finding_metric.metric("Documented findings", sum(c.kind != "unknown" for c in bundle.claims))
 report, evidence, execution = st.tabs(["Comparison", "Evidence", "Execution"])
 with report:
-    st.markdown(render(bundle), unsafe_allow_html=False)
+    st.markdown(render(bundle).split("\n", 2)[2], unsafe_allow_html=False)
     st.download_button("Download report", render(bundle), file_name="marketlens-report.md")
 with evidence:
     company = st.selectbox("Company", [c.name for c in bundle.request.companies])

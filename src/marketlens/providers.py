@@ -86,12 +86,14 @@ class TavilySearch:
 
 class QwenModel:
     def __init__(self, name):
+        os.environ.setdefault("HF_HUB_DISABLE_IMPLICIT_TOKEN", "1")
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
         if not torch.cuda.is_available():
             raise RuntimeError("Live research requires CUDA; use demo mode for CPU replay")
-        self.tokenizer = AutoTokenizer.from_pretrained(name)
-        self.model = AutoModelForCausalLM.from_pretrained(name, torch_dtype=torch.float16).to("cuda")
+        self.tokenizer = AutoTokenizer.from_pretrained(name, token=False)
+        self.model = AutoModelForCausalLM.from_pretrained(name, torch_dtype=torch.float16, token=False).to("cuda")
+        self.model_revision = getattr(self.model.config, "_commit_hash", None)
         self.input_tokens = 0
         self.output_tokens = 0
 
@@ -121,11 +123,14 @@ class QwenModel:
                 messages.append({"role": "assistant", "content": text})
                 messages.append({"role": "user", "content": "Repair your response to match the JSON schema exactly."})
 
-    def analyze(self, company, criterion, evidence):
+    def analyze(self, company, criterion, evidence, brief=""):
         return self.structured(
-            "Extract at most two supported claims for this company and criterion. Copy an exact "
+            "Extract at most two atomic supported claims for this company and criterion. Cite exactly "
+            "one evidence ID for each claim. Copy an exact "
             "quote from a cited excerpt. Preserve pricing currency, billing period, plan and seat "
-            "conditions. If insufficient evidence return an empty claims list. Mark interpretation "
-            "as inference. Never invent URLs or evidence IDs.",
-            {"company": company, "criterion": criterion,
+            "conditions, including the plan name; distinguish promotions from standard prices. "
+            "If insufficient evidence return an empty claims list. Mark interpretation "
+            "as inference. Only describe the focal company and its own offerings; exclude generic "
+            "educational advice, job requirements and unrelated products. Never invent URLs or evidence IDs.",
+            {"company": company, "criterion": criterion, "brief": brief,
              "excerpts": [e.model_dump() for e in evidence]}, ClaimBatch).claims

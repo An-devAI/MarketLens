@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -54,8 +55,9 @@ def main():
         questions = [json.loads(line) for line in args.questions.read_text().splitlines() if line]
         encoder = None
         if args.all_modes:
+            os.environ.setdefault("HF_HUB_DISABLE_IMPLICIT_TOKEN", "1")
             from sentence_transformers import SentenceTransformer
-            encoder = SentenceTransformer(Settings().embedding, device="cpu")
+            encoder = SentenceTransformer(Settings().embedding, device="cpu", token=False)
         result = evaluate(evidence, questions, ("bm25", "dense", "hybrid") if args.all_modes else ("bm25",), encoder, args.split)
         target = Path(args.output)
         target.parent.mkdir(parents=True, exist_ok=True)

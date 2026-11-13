@@ -16,6 +16,6 @@ class DemoSearch:
 
 
 class DemoModel:
-    def analyze(self, company, criterion, evidence):
+    def analyze(self, company, criterion, evidence, brief=""):
         return [Claim(company=company, criterion=criterion, text=evidence[0].text,
                       evidence_ids=[evidence[0].id], quote=evidence[0].text)]
