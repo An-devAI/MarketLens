@@ -14,6 +14,6 @@ Python dependencies used for executed checks were loaded from the existing local
 
 The sandbox cannot bind a web-server socket. Viewer validation used AppTest rather than a browser session. No screenshot or video is claimed.
 
-GitHub authentication is invalid and shell DNS access is unavailable. The product has local Conventional Commits; GitHub creation, push, Issues, PRs, branch rules and release are pending. The reference folder is a web-retrieved source snapshot, not an authenticated GitHub fork.
+At the initial implementation check, GitHub authentication was invalid and shell DNS access was unavailable. The product has local Conventional Commits; GitHub creation, push, Issues, PRs, branch rules and release have not been verified. The user subsequently supplied complete reference clones; their verified revisions and reuse details are recorded exclusively in INTRODUCTION.md. This documentation update does not establish that authentication or network access has been restored.
 
 Live LangGraph orchestration, FAISS/dense retrieval and CUDA model inference are implemented but untested here because their dependencies and GPU runtime are unavailable. Real-source labels, human semantic review, dependency locking against a successful Kaggle environment and live performance measurements remain required before releasing v0.1.0 or using numeric quality claims on a CV.
