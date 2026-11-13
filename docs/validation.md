@@ -1,19 +1,23 @@
 # Validation record — 2026-11-13
 
-## Executed
+## Verified locally
 
-- Eight unittest cases passed: request validation, company-filtered retrieval, invalid citation rejection, offline end-to-end execution, resume/configuration identity, partial failures, retrieval metric calculation, source-state reducer and retry/cache budget handling (some cases cover multiple behaviors).
-- Offline CLI generated a three-company synthetic report with 15 comparison cells; rerun resumed its checkpoint.
-- Synthetic BM25 evaluation ran on 20 held-out fixture queries (Recall@5 and MRR@5 = 1.0). This only demonstrates metric plumbing: it is not a real-source research benchmark and is unsuitable as a CV quality claim.
-- Streamlit AppTest executed the viewer against the generated bundle with zero exceptions.
-- Python compileall passed. Source-attribution scan found no reference-project URLs or copyright-holder names outside the introduction document in the product tree.
+- Ruff passes; mypy passes for all 12 package modules.
+- Twelve unittest cases pass, including actual LangGraph execution/resume, actual FAISS dense/hybrid retrieval with deterministic test embeddings, company filters, citation rejection, failure handling, cache/retry budgets, collection quotas and credential-free snapshots.
+- Wheel and source distribution build successfully. Both include INTRODUCTION.md with the license notices; neither includes .env or generated corpora.
+- Commitizen validates the feature-branch commit messages. The uv lockfile defines the reproducible local/CI environment.
+- The earlier viewer AppTest passed with zero exceptions. Local server/browser validation is now possible and remains separate from that earlier test.
 
-## Environment limitations
+## Live source collection
 
-Python dependencies used for executed checks were loaded from the existing local package cache. PyPI DNS resolution prevented installation of additional tooling. Ruff, mypy, Commitizen and package-build commands could not run locally; their workflow is configured but not yet verified in GitHub Actions.
+Collected 30 pages for the three-company demo using 15 Basic search calls on the free tier. Three source-fetch errors were recorded. The source snapshot and runtime wheel were uploaded to a private Kaggle Dataset after a credential scan. Neither dataset nor notebook contains the Tavily API key. Raw collected sources stay outside Git.
 
-The sandbox cannot bind a web-server socket. Viewer validation used AppTest rather than a browser session. No screenshot or video is claimed.
+## Remote checks
 
-At the initial implementation check, GitHub authentication was invalid and shell DNS access was unavailable. The product has local Conventional Commits; GitHub creation, push, Issues, PRs, branch rules and release have not been verified. The user subsequently supplied complete reference clones; their verified revisions and reuse details are recorded exclusively in INTRODUCTION.md. This documentation update does not establish that authentication or network access has been restored.
+The repository is now published and a feature PR will run the locked validation workflow. The first bootstrap main workflow exposed the lint/type issues fixed in this feature branch; it is not a successful CI result.
 
-Live LangGraph orchestration, FAISS/dense retrieval and CUDA model inference are implemented but untested here because their dependencies and GPU runtime are unavailable. Real-source labels, human semantic review, dependency locking against a successful Kaggle environment and live performance measurements remain required before releasing v0.1.0 or using numeric quality claims on a CV.
+The private Kaggle notebook was submitted with T4 GPU, Internet, and a 3600-second limit. Completion, model inference, real-source retrieval behavior and report quality are pending. A submitted run is not proof of a successful run.
+
+## Remaining release acceptance
+
+Real-source retrieval labels, a held-out BM25/dense/hybrid benchmark, review of at least 30 claim/source pairs, measured GPU runtime and the demo video remain required before releasing v0.1.0. Synthetic fixture scores must not be presented as research quality on a CV.
