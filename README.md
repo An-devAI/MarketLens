@@ -2,7 +2,7 @@
 
 Evidence-linked company research for product and competitive analysis. Enter 2–3 company websites; obtain an English comparison covering product, pricing, customers, integrations and positioning. Inspect the retained excerpt behind each cited claim.
 
-**Status:** local lint, types, package build, and 15 unit/integration tests pass. Two real Kaggle GPU smoke runs completed. A small retrieval diagnostic is measured below; human report review remains a release requirement.
+**Status:** local lint, types, package build, and 23 unit/integration tests pass. Two real Kaggle GPU smoke runs completed. A small retrieval diagnostic is measured below; human report review remains a release requirement.
 
 ## Quick start
 
@@ -51,6 +51,16 @@ flowchart LR
 
 Reports include claims, source excerpts, collection timestamps and limitations. SQLite retains cache/checkpoint state; FAISS stores the live dense index. Website text is treated as untrusted data. Citation checks validate identifiers and exact quotes; semantic support is evaluated separately.
 
+## Claim assessment
+
+Research now filters vendor-domain URLs, excluding community/recruiting pages and mission-template pages used for company positioning. URL eligibility does not establish authorship or truth. Each candidate passes quote integrity and a bounded contextual model assessment before retention; partial or uncertain findings remain unknown. Candidate and assessment traces are retained privately.
+
+To reassess a fixed report on CUDA without generating replacements, use `marketlens audit REPORT.json --output outputs/audit`, or the private notebook in `notebooks/audit/`. The assessor uses the same model family as the generator and is not an independent human judge.
+
+The frozen coding-agent review of v2 found 10 supported-in-context records, 7 partial, 4 requiring better sources, 1 incorrect attribution, and 8 unknown. These are regression-case judgments, not human accuracy measurements. The original report has **22 retained records and 8 unknown**; earlier narrative counts of 21/9 were incorrect. `report_summary` now derives counts directly from the artifact.
+
+A fixed-input GPU audit completed in 195.3 seconds on T4, without regenerating claims or using search credits. It retained 13 records and left 17 unknown. Against the frozen agent judgments, it withheld 8/12 flagged records but also lost 1/10 supported records. Of the retained records, 9/13 matched the agent-supported label, versus 10/22 before; coverage fell from 12/15 to 9/15 cells. Four flagged records remain. This is a regression diagnostic on observed cases, **not human precision or evidence of production readiness**. Exact decisions remain available with the private report; summary and input hashes are in docs/experiments/fixed-report-audit.json.
+
 ## Public demo
 
 [Read the curated report](examples/reports/saas-sample.md) · [Download the 2-minute walkthrough](docs/demo/walkthrough.mp4) · [English captions](docs/demo/walkthrough.srt)
@@ -61,7 +71,7 @@ Run `marketlens view examples/reports/saas-sample.json` to inspect the public ex
 
 ## Measured results
 
-A real-source smoke run completed on Tesla T4: 29 claim records across 15 comparison cells, 129 evidence chunks, and 623.6 seconds of pipeline time. Three records were converted to unknown after citation checks. The revised run produced 30 records (21 retained, 9 unknown) across 12/15 covered cells in 659.1 seconds on T4, using 200 chunks. Both demonstrate execution, not semantic accuracy.
+A real-source smoke run completed on Tesla T4: 29 claim records across 15 comparison cells, 129 evidence chunks, and 623.6 seconds of pipeline time. Three records were converted to unknown after citation checks. The revised run produced 30 records (22 retained, 8 unknown) across 12/15 covered cells in 659.1 seconds on T4, using 200 chunks. Both demonstrate execution, not semantic accuracy.
 
 On a separate 202-chunk frozen corpus, the following diagnostic used **20 agent-curated test questions**, each with one known supporting chunk:
 

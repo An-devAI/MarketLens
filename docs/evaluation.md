@@ -8,7 +8,7 @@ Targets: Recall@5 >= 0.80; 100% reference integrity; >=90% factual claim citatio
 
 Inspect claim meaning, scope, pricing currency/cadence/seats, source conflicts, age and inferred conclusions. Quote matching alone is not entailment. The generating model is not the sole judge. Store live results separately from synthetic results and include model/dependency versions, corpus hash, date, tokens, search calls, GPU and elapsed time.
 
-Real-source labels, human verdicts, GPU timing and live benchmark results are pending. No production performance is claimed by this initial implementation.
+Real-source diagnostic labels and GPU timing are recorded below. Independent human verdicts and production-quality validation remain pending.
 
 ## Initial real-source diagnostic
 
@@ -20,6 +20,22 @@ Measured labeled-chunk Recall@5: BM25 0.75, dense 0.90, hybrid 0.95 on n=20. Wit
 
 ## Model-report review
 
-The second GPU run retained 21 non-unknown records and rejected or withheld 9; it covered 12 of 15 company/criterion cells. Identifier/quote integrity is not sufficient for subject attribution: some retrieved sources are community posts or comparison articles discussing other vendors. Inspect whether every part of a claim is supported, whether pricing includes the right plan and cadence, and whether a vendor self-report is presented as such. The private `outputs/kaggle-v2/claim-review.csv` provides 30 rows with blank human verdicts; it must not be reported as a completed human audit.
+The second GPU run retained 22 non-unknown records and rejected or withheld 8; it covered 12 of 15 company/criterion cells. Identifier/quote integrity is not sufficient for subject attribution: some retrieved sources are community posts or comparison articles discussing other vendors. Inspect whether every part of a claim is supported, whether pricing includes the right plan and cadence, and whether a vendor self-report is presented as such. The private `outputs/kaggle-v2/claim-review.csv` provides 30 rows with blank human verdicts; it must not be reported as a completed human audit.
 
 The 20 diagnostic test-query retrieval inputs for Asana and monday.com are byte-for-byte identical in title/text/ID order between the 202-chunk diagnostic corpus and the 200-chunk second GPU corpus. Their difference is two duplicate Notion development chunks removed by the pipeline. The artifact hashes identify the exact evaluated corpus.
+
+## Frozen source-quality regression review
+
+`claim-review-v2-agent.json` records 30 coding-agent judgments against a canonical report digest: 10 supported in context, 7 partial, 4 inconclusive sources, 1 unsupported attribution and 8 original unknowns. Vendor statements are evaluated as source statements, not independently verified facts. This is a review of observed failures, not a new held-out human benchmark.
+
+The private fixed-report audit excludes ineligible URLs first, then asks a bounded model assessor to check every proposition against the cited context. It cannot rewrite claims. The model is from the generator's family, so it cannot establish independent correctness. `evaluate_review` verifies input identity and compares retention against frozen agent labels, reporting both supported findings lost and flagged findings withheld. Unknown original records are not counted as successful factual claims; zero retained findings yield a null supported-retained rate.
+
+The generated GPU input contains only a wheel and original report, not the frozen verdicts. Source and model rejection reasons are saved in assessments.json. Independent human acceptance remains issue #7.
+
+### Fixed-report GPU result
+
+The assessment completed on T4 in 195.3 seconds. The same 30 record positions were preserved; no new claims were generated. Source filtering withheld four community-derived assertions before model assessment. Final retention was 13 versus 22 originally; unknowns increased from 8 to 17 and coverage dropped from 12/15 to 9/15 cells.
+
+Against the frozen coding-agent labels, retained supported findings changed from 10/22 to 9/13. Eight of twelve flagged records were withheld, one supported record was lost (record 7), and four flagged records remained (1, 17, 25, 28). The assessor caught the cross-app attribution case (16), the extra unsupported customer (14), and ambiguous pricing scope (22). It still missed several compound or weakly supported inferences. These observed-case diagnostics do not establish independent human accuracy. The generator and assessor use the same model family; the separate source-context agent review is also not human review.
+
+The exact original-report digest and uploaded implementation-wheel hash accompany the result. Do not modify the frozen judgments to improve agreement after observing these outcomes. Issue #7 remains open.

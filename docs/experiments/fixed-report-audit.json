@@ -1,0 +1,95 @@
+{
+  "parent_report_sha256": "48a91eac56e4bcb807f4dbdeee50689cd0b9de001bb315a0e622c4a316737941",
+  "before": {
+    "retained": 22,
+    "agent_supported_retained": 10,
+    "agent_supported_retained_rate": 0.45454545454545453
+  },
+  "after": {
+    "retained": 13,
+    "agent_supported_retained": 9,
+    "agent_supported_retained_rate": 0.6923076923076923
+  },
+  "original_summary": {
+    "records": 30,
+    "retained": 22,
+    "unknown": 8,
+    "claim_kinds": {
+      "fact": 12,
+      "inference": 10,
+      "unknown": 8
+    },
+    "covered_cells": 12,
+    "total_cells": 15
+  },
+  "reviewed_summary": {
+    "records": 30,
+    "retained": 13,
+    "unknown": 17,
+    "claim_kinds": {
+      "fact": 7,
+      "inference": 6,
+      "unknown": 17
+    },
+    "covered_cells": 9,
+    "total_cells": 15
+  },
+  "flagged_records_withheld": 8,
+  "flagged_records_total": 12,
+  "supported_records_withheld": [
+    7
+  ],
+  "retained_records": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    17,
+    21,
+    23,
+    24,
+    25,
+    28
+  ],
+  "limitation": "Frozen coding-agent judgments on previously observed cases; not independent human precision or an external benchmark.",
+  "runtime": {
+    "gpu": "Tesla T4",
+    "duration_seconds": 195.33378336399997,
+    "parent_report_sha256": "48a91eac56e4bcb807f4dbdeee50689cd0b9de001bb315a0e622c4a316737941",
+    "summary": {
+      "records": 30,
+      "retained": 13,
+      "unknown": 17,
+      "claim_kinds": {
+        "fact": 7,
+        "inference": 6,
+        "unknown": 17
+      },
+      "covered_cells": 9,
+      "total_cells": 15
+    },
+    "model_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "input_tokens": 14897,
+    "output_tokens": 1382,
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "transformers": "4.57.6",
+      "marketlens": "0.1.0.dev0"
+    }
+  },
+  "assessment_wheel_sha256": "bcd101a7979f034abd6a17ee1f924375f409cd12fb3a71dd02cd4bbd8a989794",
+  "remaining_flagged_records": [
+    1,
+    17,
+    25,
+    28
+  ],
+  "regression_cases": {
+    "neighboring_application_attribution_16": "withheld",
+    "unsupported_customer_combination_14": "withheld",
+    "ambiguous_pricing_scope_22": "withheld"
+  }
+}
